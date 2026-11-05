@@ -115,9 +115,8 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-     {/* Hero Section */}
       <section className="relative overflow-hidden py-24 lg:py-32 bg-[#12372A] border-b border-[#D4AF37]/20">
-        {/* Video Background with Mobile-Safe Attributes */}
+        {/* Video Background (Base background color shows if mobile blocks video) */}
         <video 
           autoPlay 
           loop 
@@ -130,9 +129,8 @@ export default function Home() {
           Your browser does not support the video tag.
         </video>
 
-        {/* Solid & Gradient Overlays to ensure fallback color is always visible */}
-        <div className="absolute inset-0 bg-[#12372A]" style={{ zIndex: 1 }} />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#12372A]/60 via-[#12372A]/30 to-[#12372A] pointer-events-none" style={{ zIndex: 2 }} />
+        {/* Gradient Overlay (Sits on top of video to dim it for readability) */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#12372A]/60 via-[#12372A]/30 to-[#12372A] pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           {/* Elegant Holiday Title */}
