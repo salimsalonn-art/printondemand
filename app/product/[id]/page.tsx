@@ -48,6 +48,12 @@ const PRODUCTS = [
   }
 ];
 
+export async function generateStaticParams() {
+  return PRODUCTS.map((product) => ({
+    id: product.id.toString(),
+  }));
+}
+
 export default function ProductPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
   const productId = parseInt(resolvedParams.id);
@@ -158,7 +164,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
               </button>
 
               <div className="mt-5 flex items-center justify-around text-[11px] text-gray-500 font-medium">
-                <span className="flex items-center gap-1.5"><Truck className="w-3.5 h-3.5 text-[#12372A]" />  5-10 Business Days</span>
+                <span className="flex items-center gap-1.5"><Truck className="w-3.5 h-3.5 text-[#12372A]" /> Standard Shipping (5-10 Days)</span>
                 <span className="flex items-center gap-1.5"><ShieldCheck className="w-3.5 h-3.5 text-[#12372A]" /> SSL Secure Checkout</span>
               </div>
             </div>
@@ -166,7 +172,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
         </div>
       </div>
 
-      <footer className="bg-[#12372A] border-t border-[#12372A]/20 py-12 text-center text-[#F5EBDD]/60 text-xs tracking-wider mt-16">
+      <footer className="bg-[#12372A] border-t border-[#12372A]/20 py-12 text-center text-[#F5EBDD]/60 text-xs tracking-wider">
         <p>&copy; 2026 FestiveVault Store. All rights reserved. High-Performance Boutique Experience.</p>
       </footer>
     </div>
