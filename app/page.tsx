@@ -115,18 +115,24 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
+     {/* Hero Section */}
       <section className="relative overflow-hidden py-24 lg:py-32 bg-[#12372A] border-b border-[#D4AF37]/20">
+        {/* Video Background with Mobile-Safe Attributes */}
         <video 
           autoPlay 
           loop 
           muted 
           playsInline 
-          className="absolute inset-0 w-full h-full object-cover opacity-75 pointer-events-none scale-105"
+          preload="auto"
+          className="absolute inset-0 w-full h-full object-cover opacity-75 pointer-events-none"
         >
           <source src="/hero-bg.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
         </video>
 
-        <div className="absolute inset-0 bg-gradient-to-b from-[#12372A]/60 via-[#12372A]/30 to-[#12372A] pointer-events-none" />
+        {/* Solid & Gradient Overlays to ensure fallback color is always visible */}
+        <div className="absolute inset-0 bg-[#12372A]" style={{ zIndex: 1 }} />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#12372A]/60 via-[#12372A]/30 to-[#12372A] pointer-events-none" style={{ zIndex: 2 }} />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           {/* Elegant Holiday Title */}
@@ -138,7 +144,7 @@ export default function Home() {
             Curated winter garments crafted from high-density cotton and next-generation smart accessories engineered for the festive season.
           </p>
 
-          {/* CLEAN DEADLINE TEXT CALLOUT (NO SQUARE BOX) */}
+          {/* CLEAN DEADLINE TEXT CALLOUT */}
           <div className="mt-8 flex items-center justify-center gap-2.5">
             <span className="w-2.5 h-2.5 rounded-full bg-[#C62828] animate-ping shrink-0" />
             <a 
