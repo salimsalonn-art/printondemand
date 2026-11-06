@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useMemo, useState } from 'react';
@@ -20,7 +19,25 @@ import Link from 'next/link';
 
 const PRODUCT_PRICE = 24.99;
 
-const SECTIONS = [
+interface Product {
+  id: number;
+  name: string;
+  image: string;
+  alt: string;
+  badge: string;
+  sectionId?: string;
+  sectionTitle?: string;
+}
+
+interface Section {
+  id: string;
+  title: string;
+  emoji: string;
+  subtitle: string;
+  products: Product[];
+}
+
+const SECTIONS: Section[] = [
   {
     id: 'dogs',
     title: 'Dog Lovers',
@@ -75,7 +92,7 @@ const SECTIONS = [
   }
 ];
 
-const ALL_PRODUCTS = SECTIONS.flatMap(section =>
+const ALL_PRODUCTS: Product[] = SECTIONS.flatMap(section =>
   section.products.map(product => ({
     ...product,
     sectionId: section.id,
@@ -85,7 +102,12 @@ const ALL_PRODUCTS = SECTIONS.flatMap(section =>
 
 const FEATURED_IDS = [1, 6, 11, 16];
 
-function ProductCard({ product, featured = false }) {
+interface ProductCardProps {
+  product: Product;
+  featured?: boolean;
+}
+
+function ProductCard({ product, featured = false }: ProductCardProps) {
   return (
     <article className="group bg-white rounded-2xl overflow-hidden border border-[#E9E4D9] hover:border-[#B9C9B9] hover:shadow-xl transition-all duration-300 flex flex-col">
       <Link
@@ -110,14 +132,14 @@ function ProductCard({ product, featured = false }) {
         </div>
       </Link>
 
-      <div className="p-4 sm:p-5 flex flex-col flex-grow">
-        <div className="flex-grow">
+      <div className="p-4 sm:p-5 flex flex-col grow">
+        <div className="grow">
           <p className="text-[10px] uppercase tracking-wider font-semibold text-[#9A7960] mb-2">
             {product.sectionTitle}
           </p>
 
           <Link href={`/product/${product.id}`}>
-            <h3 className="text-[#26372E] font-bold text-sm leading-snug group-hover:text-[#8B2635] transition-colors line-clamp-2 min-h-[40px]">
+            <h3 className="text-[#26372E] font-bold text-sm leading-snug group-hover:text-[#8B2635] transition-colors line-clamp-2 min-h-10">
               {product.name}
             </h3>
           </Link>
@@ -610,7 +632,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
 
-            <div className="rounded-2xl bg-white/[0.07] border border-white/10 p-8 text-center hover:bg-white/[0.11] transition">
+            <div className="rounded-2xl bg-white/[0.07] border border-white/10 p-8 text-center hover:bg-white/10 transition">
 
               <div className="w-14 h-14 rounded-full bg-[#E7C994]/15 text-[#E7C994] flex items-center justify-center mx-auto">
                 <Truck size={25} />
@@ -626,7 +648,7 @@ export default function Home() {
 
             </div>
 
-            <div className="rounded-2xl bg-white/[0.07] border border-white/10 p-8 text-center hover:bg-white/[0.11] transition">
+            <div className="rounded-2xl bg-white/[0.07] border border-white/10 p-8 text-center hover:bg-white/10 transition">
 
               <div className="w-14 h-14 rounded-full bg-[#E7C994]/15 text-[#E7C994] flex items-center justify-center mx-auto">
                 <Heart size={25} />
@@ -642,7 +664,7 @@ export default function Home() {
 
             </div>
 
-            <div className="rounded-2xl bg-white/[0.07] border border-white/10 p-8 text-center hover:bg-white/[0.11] transition">
+            <div className="rounded-2xl bg-white/[0.07] border border-white/10 p-8 text-center hover:bg-white/10 transition">
 
               <div className="w-14 h-14 rounded-full bg-[#E7C994]/15 text-[#E7C994] flex items-center justify-center mx-auto">
                 <Gift size={25} />
