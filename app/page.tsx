@@ -92,8 +92,8 @@ const SECTIONS: Section[] = [
   }
 ];
 
-const ALL_PRODUCTS: Product[] = SECTIONS.flatMap(section =>
-  section.products.map(product => ({
+const ALL_PRODUCTS: Product[] = SECTIONS.flatMap((section: Section) =>
+  section.products.map((product: Product) => ({
     ...product,
     sectionId: section.id,
     sectionTitle: section.title
