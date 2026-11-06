@@ -774,7 +774,7 @@ export default function Home() {
           <div className="pt-7 flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px] text-white/45">
 
             <p>
-              © {new Date().getFullYear()} FestiveVault. All rights reserved.
+              © 2026 FestiveVault. All rights reserved.
             </p>
 
             <p className="tracking-wide">
