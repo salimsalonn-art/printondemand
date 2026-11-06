@@ -548,7 +548,7 @@ export default function ProductClient({ product }: { product: Product }) {
         </p>
 
         <p className="mt-6 text-[10px]">
-          © {new Date().getFullYear()} FestiveVault. All rights reserved.
+          © 2026 FestiveVault. All rights reserved.
         </p>
 
       </footer>
