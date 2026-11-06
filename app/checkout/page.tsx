@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -15,8 +14,6 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
-const PRODUCT_PRICE = 24.99;
-
 export default function CheckoutPage() {
   const { cart } = useCart();
 
@@ -24,8 +21,7 @@ export default function CheckoutPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Each cart entry represents one item.
-  const subtotal = cart.length * PRODUCT_PRICE;
+  const subtotal = cart.reduce((acc, item) => acc + (item.price || 39.99), 0);
   const shipping = 0;
   const total = subtotal + shipping;
 
@@ -65,6 +61,8 @@ export default function CheckoutPage() {
           items: cart.map((item) => ({
             id: item.id,
             name: item.name,
+            price: item.price || 39.99,
+            image: item.image,
             size: item.size,
             gender: item.gender,
             category: item.category,
@@ -78,7 +76,6 @@ export default function CheckoutPage() {
         throw new Error(data.error || 'Unable to start checkout. Please try again.');
       }
 
-      // Redirect to the secure payment provider.
       window.location.href = data.checkoutUrl;
     } catch (err) {
       setError(
@@ -92,7 +89,6 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#F5EBDD] via-[#FAF5EE] to-[#EFE2CF] text-[#12372A] py-10 sm:py-12 px-4 sm:px-6 lg:px-8 font-sans selection:bg-[#C62828] selection:text-white">
-
       <div className="max-w-6xl mx-auto">
 
         {/* Navigation */}
@@ -246,7 +242,7 @@ export default function CheckoutPage() {
                       name="city"
                       autoComplete="address-level2"
                       type="text"
-                      placeholder="Arlington"
+                      placeholder="City"
                       className="w-full bg-[#F5EBDD]/30 border border-gray-200 rounded-xl px-3.5 py-3 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#12372A] transition"
                     />
                   </div>
@@ -260,7 +256,7 @@ export default function CheckoutPage() {
                       name="state"
                       autoComplete="address-level1"
                       type="text"
-                      placeholder="VA"
+                      placeholder="State"
                       className="w-full bg-[#F5EBDD]/30 border border-gray-200 rounded-xl px-3.5 py-3 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#12372A] transition"
                     />
                   </div>
@@ -274,7 +270,7 @@ export default function CheckoutPage() {
                       name="zip"
                       autoComplete="postal-code"
                       type="text"
-                      placeholder="22201"
+                      placeholder="12345"
                       className="w-full bg-[#F5EBDD]/30 border border-gray-200 rounded-xl px-3.5 py-3 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#12372A] transition"
                     />
                   </div>
@@ -423,7 +419,7 @@ export default function CheckoutPage() {
 
                   {cart.map((item, idx) => (
                     <div
-                      key={`${item.id}-${item.size || ''}-${item.gender || ''}-${idx}`}
+                      key={`${item.id}-${item.size || ''}-${idx}`}
                       className="flex items-center gap-3.5 pb-4 border-b border-gray-50"
                     >
                       <img
@@ -438,9 +434,7 @@ export default function CheckoutPage() {
                         </h4>
 
                         <span className="block text-[10px] text-[#C62828] font-extrabold uppercase mt-1">
-                          {item.category === 'shirts'
-                            ? `${item.gender || 'Unisex'} • ${item.size || 'Standard'}`
-                            : item.category}
+                          {item.size ? `Size: ${item.size}` : item.category}
                         </span>
 
                         <span className="text-[10px] text-gray-400 mt-1 block">
@@ -449,7 +443,7 @@ export default function CheckoutPage() {
                       </div>
 
                       <span className="text-xs font-black text-[#12372A] whitespace-nowrap">
-                        ${PRODUCT_PRICE.toFixed(2)}
+                        ${(item.price || 39.99).toFixed(2)}
                       </span>
                     </div>
                   ))}

@@ -64,9 +64,9 @@ export default function RootLayout({
               "address": {
                 "@type": "PostalAddress",
                 "streetAddress": "123 Holiday Lane",
-                "addressLocality": "Arlington",
-                "addressRegion": "VA",
-                "postalCode": "22201",
+                "addressLocality": "City",
+                "addressRegion": "State",
+                "postalCode": "12345",
                 "addressCountry": "US"
               }
             }),
