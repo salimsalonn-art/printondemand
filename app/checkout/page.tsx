@@ -1,5 +1,5 @@
 'use client';
-
+import Footer from '../../components/Footer';
 import { useState } from 'react';
 import { useCart } from '../../context/CartContext';
 import {
@@ -506,13 +506,17 @@ export default function CheckoutPage() {
           </div>
         )}
 
-        <div className="text-center mt-10">
+        <div className="text-center mt-10 mb-10">
           <p className="text-[10px] text-[#12372A]/50 uppercase tracking-widest font-semibold">
             FestiveVault · Made for the Season
           </p>
         </div>
 
       </div>
+
+      {/* FOOTER */}
+      <Footer />
+
     </div>
   );
 }

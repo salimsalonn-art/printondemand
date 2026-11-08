@@ -10,6 +10,7 @@ import {
   ZoomIn,
   X,
   ShoppingBag,
+  ShoppingCart,
   Check,
   Heart,
   Gift,
@@ -29,16 +30,55 @@ interface Product {
   description: string;
 }
 
-const PRODUCT_PRICE = 24.99;
+
+const QUALITY_IMAGES = [
+  { image: '/l1.jpeg', title: 'Premium Fabric' },
+  { image: '/l2.jpeg', title: 'Quality Details' },
+  { image: '/l3.jpeg', title: 'Comfortable Feel' },
+  { image: '/l4.jpeg', title: 'Made to Last' },
+];
+
+function addBusinessDays(startDate: Date, days: number) {
+  const date = new Date(startDate);
+  let addedDays = 0;
+
+  while (addedDays < days) {
+    date.setDate(date.getDate() + 1);
+
+    if (date.getDay() !== 0 && date.getDay() !== 6) {
+      addedDays++;
+    }
+  }
+
+  return date;
+}
+
+function formatDeliveryDate(date: Date) {
+  return date.toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+  });
+}
+
 
 export default function ProductClient({ product }: { product: Product }) {
-  const { addToCart } = useCart();
-
+  const { cart, addToCart, removeFromCart, isCartOpen, setIsCartOpen, totalPrice } = useCart();
+  const PRODUCT_PRICE = product.price;
+  const today = new Date();
+  const earliestDelivery = addBusinessDays(today, 5);
+  const latestDelivery = addBusinessDays(today, 10);
   const [selectedSize, setSelectedSize] = useState<'S' | 'M' | 'L' | 'XL'>('M');
   const [selectedGender, setSelectedGender] = useState<'Men' | 'Women'>('Men');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSizeChartOpen, setIsSizeChartOpen] = useState(false);
+  const [sizeChartGender, setSizeChartGender] = useState<'Men' | 'Women'>('Men');
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
+
+  const [enlargedImage, setEnlargedImage] = useState<{
+    src: string;
+    alt: string;
+  } | null>(null);
 
   const handleAddToCart = () => {
     for (let i = 0; i < quantity; i++) {
@@ -65,7 +105,7 @@ export default function ProductClient({ product }: { product: Product }) {
       <div className="bg-[#173D32] text-white py-2.5 px-4 text-center">
         <p className="text-[11px] sm:text-xs font-bold tracking-wide flex items-center justify-center gap-2">
           <Gift size={14} className="text-[#E7C994]" />
-          <span>Every design just $24.99</span>
+          <span>Festive styles for every Christmas lover</span>
           <span className="text-[#E7C994]">·</span>
           <span className="text-[#E7C994]">FREE SHIPPING</span>
         </p>
@@ -91,13 +131,30 @@ export default function ProductClient({ product }: { product: Product }) {
             </div>
           </Link>
 
-          <Link
-            href="/"
-            className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#173D32] hover:text-[#8B2635] transition"
-          >
-            <ArrowLeft size={16} />
-            <span>Continue Shopping</span>
-          </Link>
+          <div className="flex items-center gap-3 sm:gap-5">
+            <Link
+              href="/"
+              className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#173D32] hover:text-[#8B2635] transition"
+            >
+              <ArrowLeft size={16} />
+              <span className="hidden sm:inline">Continue Shopping</span>
+            </Link>
+
+            <button
+              type="button"
+              onClick={() => setIsCartOpen(true)}
+              className="relative flex items-center gap-2 rounded-full bg-[#173D32] px-4 py-3 text-white transition hover:bg-[#245443]"
+              aria-label={`Open shopping cart, ${cart.length} items`}
+            >
+              <ShoppingCart size={18} />
+              <span className="text-xs font-bold">Cart</span>
+              {cart.length > 0 && (
+                <span className="absolute -right-2 -top-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#8B2635] px-1 text-[10px] font-black text-white">
+                  {cart.length}
+                </span>
+              )}
+            </button>
+          </div>
 
         </div>
       </header>
@@ -201,6 +258,64 @@ export default function ProductClient({ product }: { product: Product }) {
 
             </div>
 
+            {/* HOODIE QUALITY */}
+
+            <div className="mt-10">
+
+              <div className="text-center mb-5">
+                <span className="text-[10px] uppercase tracking-[0.2em] font-extrabold text-[#8B2635]">
+                  The Details Matter
+                </span>
+
+                <h2 className="mt-2 text-xl font-black text-[#173D32]">
+                  Made for Comfort & Quality
+                </h2>
+
+                <p className="mt-2 text-xs text-[#77786F] leading-relaxed">
+                  Take a closer look at the details behind every hoodie.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+
+                {QUALITY_IMAGES.map((item) => (
+
+                  <div
+                    key={item.image}
+                    className="bg-white border border-[#E9E4D9] rounded-2xl overflow-hidden"
+                  >
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setEnlargedImage({
+                          src: item.image,
+                          alt: item.title,
+                        })
+                      }
+                      aria-label={`Enlarge ${item.title}`}
+                      className="w-full aspect-square bg-[#F0EDE6] overflow-hidden cursor-zoom-in group"
+                    >
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        loading="lazy"
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    </button>
+
+                    <p className="text-center text-[11px] font-bold text-[#173D32] py-3 px-2">
+                      {item.title}
+                    </p>
+
+                  </div>
+
+                ))}
+
+              </div>
+
+            </div>
+
           </div>
 
           {/* PRODUCT DETAILS */}
@@ -244,7 +359,7 @@ export default function ProductClient({ product }: { product: Product }) {
 
               <div>
                 <p className="text-sm font-extrabold text-[#173D32]">
-                  Just $24.99. Shipping is on us.
+                  {`Just $${PRODUCT_PRICE.toFixed(2)}. Shipping is on us.`}
                 </p>
                 <p className="text-xs text-[#77786F] mt-1">
                   No additional shipping charge.
@@ -305,10 +420,21 @@ export default function ProductClient({ product }: { product: Product }) {
                     Choose Your Size
                   </label>
 
-                  <span className="text-[10px] text-[#8A8173]">
-                    {selectedSize} selected
-                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSizeChartGender(selectedGender);
+                      setIsSizeChartOpen(true);
+                    }}
+                    className="text-[11px] font-bold text-[#8B2635] underline underline-offset-4 hover:text-[#173D32] transition"
+                  >
+                    Size Guide
+                  </button>
                 </div>
+
+                <p className="text-[10px] text-[#8A8173] mb-3">
+                  {selectedSize} selected
+                </p>
 
                 <div className="grid grid-cols-4 gap-3">
 
@@ -416,6 +542,37 @@ export default function ProductClient({ product }: { product: Product }) {
 
             </div>
 
+<div className="mt-6 rounded-xl border border-green-200 bg-green-50 p-4">
+  <div className="flex items-center gap-3">
+    <Truck className="h-6 w-6 text-green-700" />
+
+    <div>
+      <p className="font-bold text-green-900">
+        FREE SHIPPING ON EVERY ORDER
+      </p>
+      <p className="text-sm text-green-800">
+        No shipping fees at checkout.
+      </p>
+    </div>
+  </div>
+
+  <div className="mt-4 flex items-start gap-3 border-t border-green-200 pt-4">
+    <Check className="mt-1 h-5 w-5 text-green-700" />
+
+    <div>
+      <p className="font-semibold text-gray-900">
+        Estimated delivery: 5–10 business days
+      </p>
+
+      <p className="mt-1 text-sm text-gray-700">
+        Expected between {formatDeliveryDate(earliestDelivery)} and{' '}
+        {formatDeliveryDate(latestDelivery)}
+      </p>
+    </div>
+  </div>
+</div>
+
+
             {/* CUSTOMER INFORMATION */}
 
             <div className="mt-8 space-y-4">
@@ -492,7 +649,205 @@ export default function ProductClient({ product }: { product: Product }) {
 
       </main>
 
-      {/* IMAGE ZOOM MODAL */}
+      {/* SIZE GUIDE MODAL */}
+
+      {isSizeChartOpen && (
+
+        <div
+          className="fixed inset-0 z-[110] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setIsSizeChartOpen(false)}
+        >
+
+          <div
+            className="bg-[#FAF7F0] w-full max-w-lg max-h-[85vh] overflow-y-auto rounded-3xl shadow-2xl p-5 sm:p-7"
+            onClick={(e) => e.stopPropagation()}
+          >
+
+            {/* HEADER */}
+
+            <div className="flex items-center justify-between mb-5">
+
+              <div>
+                <h2 className="text-xl font-black text-[#173D32]">
+                  Size Guide
+                </h2>
+
+                <p className="text-xs text-[#8A8173] mt-1">
+                  Find the right fit before ordering.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setIsSizeChartOpen(false)}
+                aria-label="Close size guide"
+                className="p-2 rounded-full bg-[#E9E4D9] text-[#173D32] hover:bg-[#DCD4C5] transition"
+              >
+                <X size={20} />
+              </button>
+
+            </div>
+
+            {/* MEN / WOMEN SELECTOR */}
+
+            <div className="grid grid-cols-2 gap-3 mb-7">
+
+              {(['Men', 'Women'] as const).map((gender) => (
+
+                <button
+                  key={gender}
+                  type="button"
+                  onClick={() => setSizeChartGender(gender)}
+                  aria-pressed={sizeChartGender === gender}
+                  className={`py-3.5 rounded-xl text-xs font-extrabold transition-all border ${
+                    sizeChartGender === gender
+                      ? 'bg-[#173D32] border-[#173D32] text-white shadow-md'
+                      : 'bg-white border-[#E3DED3] text-[#173D32] hover:border-[#173D32]'
+                  }`}
+                >
+                  {gender}'s Size Chart
+                </button>
+
+              ))}
+
+            </div>
+
+            {/* BODY CHART */}
+
+            <div className="space-y-7">
+
+              <div>
+
+                <h3 className="text-sm font-extrabold text-[#173D32] mb-3">
+                  Body Chart
+                </h3>
+
+                <div className="bg-white border border-[#E9E4D9] rounded-2xl overflow-hidden">
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setEnlargedImage({
+                        src: sizeChartGender === 'Men' ? '/sizem1.jpeg' : '/sizew1.jpeg',
+                        alt: `${sizeChartGender} Body Chart`,
+                      })
+                    }
+                    className="w-full cursor-zoom-in"
+                    aria-label="Enlarge body chart"
+                  >
+                    <img
+                      src={sizeChartGender === 'Men' ? '/sizem1.jpeg' : '/sizew1.jpeg'}
+                      alt={`${sizeChartGender} body size chart`}
+                      className="w-full h-auto object-contain hover:opacity-90 transition"
+                    />
+                  </button>
+
+                </div>
+
+                <p className="text-center text-[10px] text-[#8A8173] mt-2">
+                  Click image to enlarge
+                </p>
+
+              </div>
+
+              {/* PRODUCT CHART */}
+
+              <div>
+
+                <h3 className="text-sm font-extrabold text-[#173D32] mb-3">
+                  Product Chart
+                </h3>
+
+                <div className="bg-white border border-[#E9E4D9] rounded-2xl overflow-hidden">
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setEnlargedImage({
+                        src: sizeChartGender === 'Men' ? '/sizem2.jpeg' : '/sizew2.jpeg',
+                        alt: `${sizeChartGender} Product Chart`,
+                      })
+                    }
+                    className="w-full cursor-zoom-in"
+                    aria-label="Enlarge product chart"
+                  >
+                    <img
+                      src={sizeChartGender === 'Men' ? '/sizem2.jpeg' : '/sizew2.jpeg'}
+                      alt={`${sizeChartGender} product size chart`}
+                      className="w-full h-auto object-contain hover:opacity-90 transition"
+                    />
+                  </button>
+
+                </div>
+
+                <p className="text-center text-[10px] text-[#8A8173] mt-2">
+                  Click image to enlarge
+                </p>
+
+              </div>
+
+            </div>
+
+            {/* FOOTER */}
+
+            <button
+              type="button"
+              onClick={() => setIsSizeChartOpen(false)}
+              className="w-full mt-7 py-4 rounded-xl bg-[#173D32] text-white text-xs font-extrabold uppercase tracking-widest hover:bg-[#245443] transition"
+            >
+              Done
+            </button>
+
+          </div>
+
+        </div>
+
+      )}
+
+      {/* UNIVERSAL IMAGE ENLARGEMENT */}
+
+      {enlargedImage && (
+
+        <div
+          className="fixed inset-0 z-[200] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 sm:p-8"
+          onClick={() => setEnlargedImage(null)}
+        >
+
+          <button
+            type="button"
+            onClick={() => setEnlargedImage(null)}
+            aria-label="Close enlarged image"
+            className="absolute top-5 right-5 sm:top-8 sm:right-8 bg-white/15 hover:bg-white/25 text-white p-3 rounded-full transition z-10"
+          >
+            <X size={24} />
+          </button>
+
+          <div
+            className="max-w-5xl w-full flex flex-col items-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+
+            <img
+              src={enlargedImage.src}
+              alt={enlargedImage.alt}
+              className="max-h-[85vh] max-w-full object-contain rounded-xl shadow-2xl"
+            />
+
+            <p className="mt-4 text-white text-sm font-semibold text-center">
+              {enlargedImage.alt}
+            </p>
+
+            <p className="mt-2 text-white/60 text-xs">
+              Click outside the image to close.
+            </p>
+
+          </div>
+
+        </div>
+
+      )}
+
+      {/* PRODUCT IMAGE ZOOM MODAL */}
 
       {isModalOpen && (
 
@@ -533,6 +888,108 @@ export default function ProductClient({ product }: { product: Product }) {
 
         </div>
 
+      )}
+
+      {/* SHOPPING CART DRAWER */}
+      {isCartOpen && (
+        <div
+          className="fixed inset-0 z-[300] bg-black/50 backdrop-blur-sm"
+          onClick={() => setIsCartOpen(false)}
+        >
+          <section
+            role="dialog"
+            aria-modal="true"
+            aria-label="Shopping cart"
+            className="absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-[#FAF7F0] shadow-2xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex items-center justify-between border-b border-[#E9E4D9] p-6">
+              <div>
+                <h2 className="text-xl font-black text-[#173D32]">Your Shopping Cart</h2>
+                <p className="mt-1 text-xs text-[#8A8173]">
+                  {cart.length} item{cart.length === 1 ? '' : 's'} in your cart
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsCartOpen(false)}
+                className="rounded-full p-2 text-[#173D32] transition hover:bg-[#E9E4D9]"
+                aria-label="Close shopping cart"
+              >
+                <X size={22} />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-6">
+              {cart.length === 0 ? (
+                <div className="py-16 text-center">
+                  <ShoppingBag size={42} className="mx-auto text-[#8A8173]" />
+                  <h3 className="mt-4 font-bold text-[#173D32]">Your cart is empty</h3>
+                  <p className="mt-2 text-sm text-[#8A8173]">Discover something festive!</p>
+                </div>
+              ) : (
+                <div className="space-y-5">
+                  {cart.map((item, index) => (
+                    <div
+                      key={`${item.id}-${item.size ?? 'no-size'}-${item.gender ?? 'no-gender'}-${index}`}
+                      className="flex gap-4 border-b border-[#E9E4D9] pb-5"
+                    >
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="h-20 w-20 rounded-xl bg-white object-cover"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <h3 className="text-sm font-bold text-[#173D32]">{item.name}</h3>
+                        <p className="mt-1 text-xs text-[#8A8173]">
+                          {item.gender ? `${item.gender}'s Cut` : 'Standard'}
+                          {item.size ? ` · Size ${item.size}` : ''}
+                        </p>
+                        <p className="mt-2 text-sm font-black text-[#8B2635]">
+                          ${item.price.toFixed(2)}
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => removeFromCart(index)}
+                          className="mt-2 text-xs text-[#8B2635] underline underline-offset-2"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {cart.length > 0 && (
+              <div className="border-t border-[#E9E4D9] bg-white p-6">
+                <div className="mb-2 flex justify-between">
+                  <span className="text-sm text-[#686E65]">Subtotal</span>
+                  <span className="font-bold text-[#173D32]">${totalPrice.toFixed(2)}</span>
+                </div>
+                <div className="mb-4 flex justify-between">
+                  <span className="text-sm text-[#686E65]">Shipping</span>
+                  <span className="text-sm font-bold text-green-700">FREE</span>
+                </div>
+                <div className="mb-5 flex justify-between border-t border-[#E9E4D9] pt-4">
+                  <span className="font-black text-[#173D32]">Total</span>
+                  <span className="text-xl font-black text-[#8B2635]">${totalPrice.toFixed(2)}</span>
+                </div>
+                <Link
+                  href="/checkout"
+                  onClick={() => setIsCartOpen(false)}
+                  className="block w-full rounded-xl bg-[#8B2635] py-4 text-center text-xs font-extrabold uppercase tracking-widest text-white transition hover:bg-[#72202D]"
+                >
+                  Proceed to Checkout
+                </Link>
+                <p className="mt-3 text-center text-[10px] text-[#8A8173]">
+                  Free shipping · Secure checkout
+                </p>
+              </div>
+            )}
+          </section>
+        </div>
       )}
 
       {/* FOOTER */}

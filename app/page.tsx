@@ -1,5 +1,5 @@
 'use client';
-
+import Footer from '@/components/Footer';
 import { useMemo, useState } from 'react';
 import { useCart } from '../context/CartContext';
 import {
@@ -716,76 +716,7 @@ export default function Home() {
 
       {/* FOOTER */}
 
-      <footer className="bg-[#10291F] text-white/75 pt-14 pb-8">
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-white/10">
-
-            <div className="lg:col-span-2">
-
-              <Link href="/" className="inline-flex items-center gap-2">
-                <span className="text-3xl">🎄</span>
-                <span className="text-2xl font-black text-white">
-                  Festive<span className="text-[#D5B77B]">Vault</span>
-                </span>
-              </Link>
-
-              <p className="mt-4 text-sm leading-relaxed max-w-sm text-white/60">
-                Bringing a little more fun, warmth, and Christmas spirit
-                to your wardrobe. Discover festive designs made for
-                the most wonderful time of the year.
-              </p>
-
-            </div>
-
-            <div>
-              <h4 className="text-white font-bold text-sm mb-5">
-                Shop Collections
-              </h4>
-
-              <div className="flex flex-col gap-3 text-sm">
-                <a href="#dogs" className="hover:text-[#E7C994] transition">Dog Lovers</a>
-                <a href="#cats" className="hover:text-[#E7C994] transition">Cat Lovers</a>
-                <a href="#santa" className="hover:text-[#E7C994] transition">Santa's Workshop</a>
-                <a href="#christmas" className="hover:text-[#E7C994] transition">Christmas Classics</a>
-              </div>
-            </div>
-
-            <div>
-              <h4 className="text-white font-bold text-sm mb-5">
-                Our Store
-              </h4>
-
-              <div className="flex flex-col gap-3 text-sm">
-                <a href="#featured" className="hover:text-[#E7C994] transition">Featured Designs</a>
-                <a href="#collections" className="hover:text-[#E7C994] transition">Shop All</a>
-                <button
-                  onClick={() => setIsCartOpen(true)}
-                  className="text-left hover:text-[#E7C994] transition"
-                >
-                  Shopping Cart
-                </button>
-              </div>
-            </div>
-
-          </div>
-
-          <div className="pt-7 flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px] text-white/45">
-
-            <p>
-              © 2026 FestiveVault. All rights reserved.
-            </p>
-
-            <p className="tracking-wide">
-              Christmas Made Wearable. 🎄
-            </p>
-
-          </div>
-
-        </div>
-
-      </footer>
+<Footer />
 
     </div>
   );

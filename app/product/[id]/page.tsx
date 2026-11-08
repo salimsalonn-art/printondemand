@@ -1,5 +1,5 @@
 import ProductClient from './ProductClient';
-
+import Footer from '@/components/Footer';
 const PRODUCTS = [
   // DOG'S LOVER (fd1 to fd5)
   { id: 1, name: "Festive Paws Premium Holiday Hoodie", category: "dogs", price: 54.99, rating: 4.9, reviews: 142, image: "/fd1.jpeg", description: "Luxurious heavy cotton holiday hoodie featuring festive dog winter artwork." },
@@ -41,5 +41,10 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
   const productId = parseInt(resolvedParams.id);
   const product = PRODUCTS.find((p) => p.id === productId) || PRODUCTS[0];
 
-  return <ProductClient product={product} />;
+  return (
+  <>
+    <ProductClient product={product} />
+    <Footer />
+  </>
+);
 }
