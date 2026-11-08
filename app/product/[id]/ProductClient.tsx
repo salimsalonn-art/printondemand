@@ -24,8 +24,7 @@ interface Product {
   name: string;
   category: string;
   price: number;
-  rating: number;
-  reviews: number;
+ 
   image: string;
   description: string;
 }
