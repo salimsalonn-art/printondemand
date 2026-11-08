@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useCart } from '../../../context/CartContext';
 import {
   Truck,
@@ -63,10 +63,16 @@ function formatDeliveryDate(date: Date) {
 
 export default function ProductClient({ product }: { product: Product }) {
   const { cart, addToCart, removeFromCart, isCartOpen, setIsCartOpen, totalPrice } = useCart();
-  const PRODUCT_PRICE = product.price;
+  const PRODUCT_PRICE = 24.99;
+ const [earliestDelivery, setEarliestDelivery] = useState<Date | null>(null);
+const [latestDelivery, setLatestDelivery] = useState<Date | null>(null);
+
+useEffect(() => {
   const today = new Date();
-  const earliestDelivery = addBusinessDays(today, 5);
-  const latestDelivery = addBusinessDays(today, 10);
+
+  setEarliestDelivery(addBusinessDays(today, 5));
+  setLatestDelivery(addBusinessDays(today, 10));
+}, []);
   const [selectedSize, setSelectedSize] = useState<'S' | 'M' | 'L' | 'XL'>('M');
   const [selectedGender, setSelectedGender] = useState<'Men' | 'Women'>('Men');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -559,16 +565,22 @@ export default function ProductClient({ product }: { product: Product }) {
   <div className="mt-4 flex items-start gap-3 border-t border-green-200 pt-4">
     <Check className="mt-1 h-5 w-5 text-green-700" />
 
-    <div>
-      <p className="font-semibold text-gray-900">
-        Estimated delivery: 5–10 business days
-      </p>
+   <div>
+  <p className="font-semibold text-gray-900">
+    Estimated delivery: 5–10 business days
+  </p>
 
-      <p className="mt-1 text-sm text-gray-700">
+  <p className="mt-1 text-sm text-gray-700">
+    {earliestDelivery && latestDelivery ? (
+      <>
         Expected between {formatDeliveryDate(earliestDelivery)} and{' '}
         {formatDeliveryDate(latestDelivery)}
-      </p>
-    </div>
+      </>
+    ) : (
+      'Calculating delivery dates...'
+    )}
+  </p>
+</div>
   </div>
 </div>
 
