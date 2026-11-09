@@ -3,6 +3,9 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "../context/CartContext";
 import CartDrawer from "../components/CartDrawer";
+import Footer from "../components/Footer";
+import { Analytics } from '@vercel/analytics/react';
+import Script from 'next/script';
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -48,6 +51,21 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <head>
+        {/* Microsoft Clarity Tracking Script */}
+        <Script
+          id="microsoft-clarity"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(c,l,a,r,i,t,y){
+                  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                  t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+              })(window, document, "clarity", "script", "YOUR_CLARITY_ID");
+            `,
+          }}
+        />
+
         {/* Schema.org JSON-LD for E-Commerce Google Ranking */}
         <script
           type="application/ld+json"
@@ -73,11 +91,17 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${inter.className} bg-[#12372A] text-[#F5EBDD] antialiased`}>
+      <body className={`${inter.className} bg-[#FAF7F0] text-[#252B25] antialiased`}>
         <CartProvider>
-          {children}
+          <div className="flex flex-col min-h-screen justify-between">
+            <main className="flex-grow">{children}</main>
+            <Footer />
+          </div>
           <CartDrawer />
         </CartProvider>
+        
+        {/* Vercel Analytics */}
+        <Analytics />
       </body>
     </html>
   );
