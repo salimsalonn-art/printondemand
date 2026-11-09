@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
-const PRODUCT_PRICE = 24.99;
+const PRODUCT_PRICE = 25.99;
 
 interface Product {
   id: number;
@@ -219,7 +219,7 @@ export default function Home() {
           <Sparkles size={12} className="text-[#D5B77B]" />
           <span>Christmas shopping just got better.</span>
           <span className="font-extrabold text-[#E7C994]">
-            $24.99 + FREE SHIPPING
+            $25.99 + FREE SHIPPING
           </span>
           <Sparkles size={12} className="text-[#D5B77B]" />
         </p>
@@ -489,7 +489,7 @@ export default function Home() {
           <div className="hidden h-10 w-px bg-[#D8CCB8] sm:block" />
 
           <div className="text-2xl font-black text-[#8B2635]">
-            $24.99
+            $25.99
             <span className="block text-center text-[9px] uppercase tracking-widest text-[#173D32] sm:text-[10px]">
               Every design
             </span>
@@ -726,7 +726,7 @@ export default function Home() {
         </a>
 
         <p className="mt-4 text-xs font-semibold text-[#173D32]">
-          $24.99 · Free Shipping
+          $25.99 · Free Shipping
         </p>
       </section>
 

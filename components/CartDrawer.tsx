@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
-const PRODUCT_PRICE = 24.99;
+const PRODUCT_PRICE = 25.99;
 
 export default function CartDrawer() {
   const {
@@ -222,7 +222,7 @@ export default function CartDrawer() {
               </div>
 
               <p className="text-center text-[10px] text-gray-400">
-                Free shipping · $24.99 per item
+                Free shipping · $25.99 per item
               </p>
 
             </div>

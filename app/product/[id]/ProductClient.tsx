@@ -62,7 +62,7 @@ function formatDeliveryDate(date: Date) {
 
 export default function ProductClient({ product }: { product: Product }) {
   const { cart, addToCart, removeFromCart, isCartOpen, setIsCartOpen, totalPrice } = useCart();
-  const PRODUCT_PRICE = 24.99;
+  const PRODUCT_PRICE = 25.99;
  const [earliestDelivery, setEarliestDelivery] = useState<Date | null>(null);
 const [latestDelivery, setLatestDelivery] = useState<Date | null>(null);
 
